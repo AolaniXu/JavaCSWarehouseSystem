@@ -1,13 +1,14 @@
 package func;
 
-import ui.ChangePasswordFrame;
+import javax.swing.JMenuItem;
+
 
 public class ChangePasswordFunction extends AbstractButtonFunction {
 
     @Override
-    public void executeFunction(javax.swing.JMenuItem src) {
+    public void executeFunction(JMenuItem src) {
         // TODO Auto-generated method stub
-        new ChangePasswordFrame().setVisible(true);
+        System.out.println("执行修改密码功能");
     }
     
 }
