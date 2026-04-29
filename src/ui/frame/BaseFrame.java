@@ -1,55 +1,56 @@
 package ui.frame;
 
 import java.awt.BorderLayout;
-
 import javax.swing.*;
+import java.awt.Component;
 
-import ui.componet.DataNavigator;
-import ui.panel.BaseFormPanel;
+
+
 
 public abstract class BaseFrame extends JInternalFrame {
 
-    protected BaseFormPanel formPanel;
-    protected JTable table;
-    protected DataNavigator navigator;
+    protected JPanel leftPanel;
+    protected JPanel rightPanel;
+    protected JPanel bottomPanel;
 
-    public BaseFrame(String title) {
-        super(title, true, true, true, true);
-        setSize(900, 600);
-        setLayout(new BorderLayout());
-
-        initUI();
+    public BaseFrame() {
+        initLayout();
     }
 
-    private void initUI() {
-        // 子类提供表单
-        formPanel = createFormPanel();
+    private void initLayout() {
 
-        // 表格统一创建
-        table = new JTable();
-
-        // 导航条统一创建
-        navigator = new DataNavigator();
+        this.setLayout(new BorderLayout());
 
         // 左右分割
         JSplitPane splitPane = new JSplitPane(
-                JSplitPane.HORIZONTAL_SPLIT,
-                formPanel,
-                new JScrollPane(table)
-        );
+                JSplitPane.HORIZONTAL_SPLIT);
 
-        splitPane.setDividerLocation(300);
+        leftPanel = new JPanel(new BorderLayout());
+        rightPanel = new JPanel(new BorderLayout());
 
-        add(splitPane, BorderLayout.CENTER);
-        add(navigator, BorderLayout.SOUTH);
+        splitPane.setLeftComponent(leftPanel);
+        splitPane.setRightComponent(rightPanel);
 
-        // 交给子类处理
-        bindEvents();
-        loadData();
+        splitPane.setDividerLocation(400);
+
+        // 底部
+        bottomPanel = new JPanel();
+
+        this.add(splitPane, BorderLayout.CENTER);
+        this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // 子类必须实现的内容
-    protected abstract BaseFormPanel createFormPanel();
-    protected abstract void bindEvents();
-    protected abstract void loadData();
+    // ===== 提供插槽方法 =====
+
+    protected void setLeft(Component comp) {
+        leftPanel.add(comp, BorderLayout.CENTER);
+    }
+
+    protected void setRight(Component comp) {
+        rightPanel.add(comp, BorderLayout.CENTER);
+    }
+
+    protected void setBottom(Component comp) {
+        bottomPanel.add(comp);
+    }
 }

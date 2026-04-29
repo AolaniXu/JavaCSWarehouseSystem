@@ -33,7 +33,12 @@ public class MainFrame extends JFrame {
         // Test loading InStockFrame
         InStockFrame frame = new InStockFrame();
         desktopPane.add(frame);
-        frame.setVisible(true);
+        
+        try {
+            frame.setMaximum(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.MenuItem;
+import util.DBUtil;
 
 public class MenuDao {
-
-    // 你可以替换成自己的数据库工具类
-    private static final String URL = "jdbc:mysql://localhost:3306/warehouse_system";
-    private static final String USER = "root";
-    private static final String PASSWORD = "123456";
 
     public List<MenuItem> findAllMenus() {
 
@@ -19,11 +15,14 @@ public class MenuDao {
 
         String sql = "SELECT code, title, is_menu, func_class_name FROM sys_menu ORDER BY code";
 
-        try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()
-        ) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+                conn = DBUtil.getConnection();
+                ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
 
             while (rs.next()) {
 
@@ -36,11 +35,13 @@ public class MenuDao {
 
                 list.add(item);
                 // 调试输出
-                System.out.println("load: " + item.getCode() + " " + item.getTitle());
+                // System.out.println("load: " + item.getCode() + " " + item.getTitle());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            DBUtil.close(conn, ps, rs);
         }
 
         // 调试输出总数

@@ -1,0 +1,56 @@
+package dao;
+
+import model.StockInDTO;
+import util.DBUtil;
+import java.sql.*;
+import java.util.Date;
+
+public class StockInDao {
+
+    public int insert(StockInDTO dto) {
+
+        String sql = "INSERT INTO stock_in " +
+                "(warehouse_id, create_time, invoice_no, supplier, operator, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+
+            if (dto.getCreateTime() == null) {
+                dto.setCreateTime(new Date());
+            }
+
+            // ⭐关键：获取自增主键
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setInt(1, dto.getWarehouseId());
+            ps.setTimestamp(2, new Timestamp(dto.getCreateTime().getTime()));
+            ps.setString(3, dto.getInvoiceNo());
+            ps.setString(4, dto.getSupplier());
+            ps.setString(5, dto.getOperator());
+            ps.setInt(6, dto.getStatus());
+
+            int rows = ps.executeUpdate();
+
+            if (rows == 0) {
+                throw new RuntimeException("主表插入失败");
+            }
+
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(conn, ps, rs);
+        }
+
+        return -1;
+    }
+}
