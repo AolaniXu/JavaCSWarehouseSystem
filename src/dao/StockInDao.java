@@ -1,9 +1,12 @@
 package dao;
 
 import model.StockInDTO;
+import model.StockInView;
 import util.DBUtil;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class StockInDao {
 
@@ -53,4 +56,41 @@ public class StockInDao {
 
         return -1;
     }
+
+    public List<StockInView> findAllForTable() {
+
+        List<StockInView> list = new ArrayList<>();
+
+        String sql = "SELECT id, warehouse_id, create_time, invoice_no, " +
+                "supplier, operator, status, biz_time " +
+                "FROM stock_in " +
+                "ORDER BY id DESC";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                StockInView v = new StockInView();
+
+                v.setId(rs.getInt("id"));
+                v.setWarehouseId(rs.getInt("warehouse_id"));
+                v.setCreateTime(rs.getString("create_time"));
+                v.setInvoiceNo(rs.getString("invoice_no"));
+                v.setSupplier(rs.getString("supplier"));
+                v.setOperator(rs.getString("operator"));
+                v.setStatus(rs.getInt("status"));
+                v.setBizTime(rs.getString("biz_time"));
+
+                list.add(v);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }

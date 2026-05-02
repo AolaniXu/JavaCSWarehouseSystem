@@ -1,5 +1,6 @@
 package func;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
 
 

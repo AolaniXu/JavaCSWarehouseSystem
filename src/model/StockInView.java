@@ -1,0 +1,66 @@
+package model;
+
+public class StockInView {
+
+    private int id;
+    private int warehouseId;
+    private String createTime;
+    private String invoiceNo;
+    private String supplier;
+    private String operator;
+    private int status;
+    private String bizTime;
+    
+    // getter / setter
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getWarehouseId() {
+        return warehouseId;
+    }
+    public void setWarehouseId(int warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+    public String getCreateTime() {
+        return createTime;
+    }
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo;
+    }
+    public String getSupplier() {
+        return supplier;
+    }
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+    public String getOperator() {
+        return operator;
+    }
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public String getBizTime() {
+        return bizTime;
+    }
+    public void setBizTime(String bizTime) {
+        this.bizTime = bizTime;
+    }
+
+    
+}
+

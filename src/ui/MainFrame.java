@@ -1,10 +1,12 @@
 package ui;
 
+import java.beans.PropertyVetoException;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 
 import dao.MenuDao;
@@ -33,12 +35,14 @@ public class MainFrame extends JFrame {
         // Test loading InStockFrame
         InStockFrame frame = new InStockFrame();
         desktopPane.add(frame);
-        
+
         try {
             frame.setMaximum(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
 
     }
 
@@ -63,9 +67,15 @@ public class MainFrame extends JFrame {
     }
 
     public MainFrame() {
+
         initUI();
         initEvents();
         initData();
+        
+    }
+
+    public JDesktopPane getDesktopPane() {
+        return desktopPane;
     }
 
 }

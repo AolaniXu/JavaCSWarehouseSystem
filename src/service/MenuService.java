@@ -1,8 +1,12 @@
 package service;
 
 import javax.swing.*;
+
+import java.awt.Window;
+import java.awt.KeyboardFocusManager;
 import java.util.*;
 import model.MenuItem;
+import ui.MainFrame;
 import func.AbstractButtonFunction;
 
 public class MenuService {
@@ -95,7 +99,6 @@ public class MenuService {
     private void invoke(String className, JMenuItem src) {
 
         try {
-            System.out.println("className = " + className);
             Class<?> clazz = Class.forName(className);
 
             AbstractButtonFunction func = (AbstractButtonFunction) clazz.getDeclaredConstructor().newInstance();
@@ -106,5 +109,7 @@ public class MenuService {
             e.printStackTrace();
         }
     }
+
+
 
 }

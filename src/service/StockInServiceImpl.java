@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.StockInDTO;
 import model.StockInDetailDTO;
+import model.StockInView;
 import dao.ProductDao;
 import dao.StockInDao;
 import dao.StockInDetailDao;
@@ -65,10 +66,11 @@ public class StockInServiceImpl implements StockInService {
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
+    private StockInDao dao = new StockInDao();
+
     @Override
-    public List<StockInDTO> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    public List<StockInView> getStockInList() {
+        return dao.findAllForTable();
     }
 
 }

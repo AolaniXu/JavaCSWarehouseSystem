@@ -1,5 +1,7 @@
 package service;
 import model.StockInDTO;
+import model.StockInView;
+
 import java.util.List;
 
 public interface StockInService {
@@ -12,5 +14,6 @@ public interface StockInService {
 
     StockInDTO findById(int id);
 
-    List<StockInDTO> findAll();
+    List<StockInView> getStockInList();
+
 }

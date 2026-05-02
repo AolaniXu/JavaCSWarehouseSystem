@@ -28,6 +28,6 @@ public abstract class BaseFormPane<T> extends JPanel {
     // 可选通用能力
     public abstract void reset();
 
-    // 需要时再用
+    
     public abstract T getData();
 }

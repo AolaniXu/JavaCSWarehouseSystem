@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.List;
 
 import ui.panel.InStockPane;
+import ui.panel.StockInTablePane;
 import ui.componet.DataNavigator;
 import model.StockInDTO;
 import model.StockInDetailDTO;
@@ -37,20 +38,12 @@ public class InStockFrame extends BaseFrame {
         // ===== 左：单据 =====
         formPane = new InStockPane();
 
-        // ===== 右：占位（以后换成ListPane）=====
-        listPlaceholder = new JPanel(new BorderLayout());
-        listPlaceholder.add(
-                new JLabel("（列表区，待实现）", SwingConstants.CENTER),
-                BorderLayout.CENTER);
-
-        // ===== 下：导航栏 =====
-        // nav = new DataNavigator();
+        // ===== 下：按钮 =====
         saveButton = new JButton("提交");
 
         // ===== 组装 =====
         setLeft(formPane);
-        setRight(listPlaceholder);
-        // setBottom(nav);
+        setRight(new StockInTablePane()); // ✅ 关键
         setBottom(saveButton);
     }
 
@@ -90,5 +83,7 @@ public class InStockFrame extends BaseFrame {
             // 5. 失败提示（避免程序崩溃）
             JOptionPane.showMessageDialog(this, "提交失败：" + ex.getMessage());
         }
+
+        setRight(new StockInTablePane());  // 重新加载表格
     }
 }
