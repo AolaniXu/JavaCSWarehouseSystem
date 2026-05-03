@@ -16,6 +16,9 @@ import ui.frame.InStockFrame;
 
 public class MainFrame extends JFrame {
 
+    // 静态引用，供 ProductTreeFunction 等使用
+    public static MainFrame instance;
+
     private JDesktopPane desktopPane;
 
     private void initUI() {
@@ -42,11 +45,9 @@ public class MainFrame extends JFrame {
             e.printStackTrace();
         }
 
-
-
     }
 
-    private void initMenuBar() {
+    private void initMenuBar() { // 创建菜单栏
 
         MenuDao dao = new MenuDao();
         List<MenuItem> list = dao.findAllMenus();
@@ -68,10 +69,11 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
 
+        instance = this; // 保存静态引用
         initUI();
         initEvents();
         initData();
-        
+
     }
 
     public JDesktopPane getDesktopPane() {

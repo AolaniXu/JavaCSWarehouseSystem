@@ -15,6 +15,7 @@ public class ProductTreePanel extends JPanel {
     private JTree tree;
 
     public ProductTreePanel() {
+        System.out.println("Initializing ProductTreePanel...");
         setLayout(new BorderLayout());
         initTree();
     }
