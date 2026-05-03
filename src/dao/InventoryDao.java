@@ -1,7 +1,10 @@
 package dao;
 
+import model.InventoryView;
 import util.DBUtil;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryDao {
 
@@ -23,10 +26,9 @@ public class InventoryDao {
 
     // 减少库存（先检查是否足够）
     public boolean decrease(int productId, int quantity) {
-        // 先检查库存是否足够
         int current = getQuantity(productId);
         if (current < quantity) {
-            return false;  // 库存不足
+            return false;
         }
 
         String sql = "UPDATE inventory SET quantity = quantity - ? " +
@@ -60,4 +62,41 @@ public class InventoryDao {
         }
         return 0;
     }
+
+    // 查询所有库存（关联商品表和仓库表）
+    public List<InventoryView> findAllForTable() {
+
+        List<InventoryView> list = new ArrayList<>();
+
+        String sql = "SELECT i.id, i.product_id, i.warehouse_id, i.quantity, " +
+                "p.code AS product_code, p.name AS product_name, " +
+                "w.name AS warehouse_name " +
+                "FROM inventory i " +
+                "LEFT JOIN product p ON i.product_id = p.id " +
+                "LEFT JOIN warehouse w ON i.warehouse_id = w.id " +
+                "ORDER BY i.id";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                InventoryView v = new InventoryView();
+                v.setId(rs.getInt("id"));
+                v.setProductId(rs.getInt("product_id"));
+                v.setWarehouseId(rs.getInt("warehouse_id"));
+                v.setQuantity(rs.getInt("quantity"));
+                v.setProductCode(rs.getString("product_code"));
+                v.setProductName(rs.getString("product_name"));
+                v.setWarehouseName(rs.getString("warehouse_name"));
+                list.add(v);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }
+
