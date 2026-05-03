@@ -16,4 +16,7 @@ public interface StockInService {
 
     List<StockInView> getStockInList();
 
+    // 获取所有记录的 ID 列表（用于导航）
+    List<Integer> getAllIds();
+
 }

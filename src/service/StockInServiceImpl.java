@@ -50,21 +50,54 @@ public class StockInServiceImpl implements StockInService {
 
     @Override
     public void update(StockInDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        // 1. 更新主表
+        stockInDao.update(dto);
+
+        // 2. 删除旧明细
+        detailDao.deleteByStockInId(dto.getId());
+
+        // 3. 插入新明细
+        for (StockInDetailDTO d : dto.getDetails()) {
+            if (d.getProductId() == null) {
+                int productId = productDao.findIdByCode(d.getProductCode());
+                d.setProductId(productId);
+            }
+            double amount = d.getQuantity() * d.getPrice();
+            d.setAmount(amount);
+            d.setStockInId(dto.getId());
+            detailDao.insert(d);
+        }
     }
 
     @Override
     public void delete(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        // 1. 先删明细
+        detailDao.deleteByStockInId(id);
+        // 2. 再删主表
+        stockInDao.delete(id);
     }
 
     @Override
     public StockInDTO findById(int id) {
-        // TODO: 实现根据 ID 查询完整数据（包括明细）
-        // 目前返回 null，后续会完善
-        return null;
+        // 1. 查询主表
+        StockInView view = stockInDao.findById(id);
+        if (view == null) {
+            return null;
+        }
+
+        // 2. 构建 DTO
+        StockInDTO dto = new StockInDTO();
+        dto.setId(view.getId());
+        dto.setWarehouseId(view.getWarehouseId());
+        dto.setInvoiceNo(view.getInvoiceNo());
+        dto.setSupplier(view.getSupplier());
+        dto.setOperator(view.getOperator());
+        dto.setStatus(view.getStatus());
+
+        // 3. 查询明细列表
+        dto.setDetails(detailDao.findByStockInId(id));
+
+        return dto;
     }
 
     private StockInDao dao = new StockInDao();
@@ -74,5 +107,9 @@ public class StockInServiceImpl implements StockInService {
         return dao.findAllForTable();
     }
 
-}
+    @Override
+    public List<Integer> getAllIds() {
+        return dao.findAllIds();
+    }
 
+}

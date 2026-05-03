@@ -127,4 +127,69 @@ public class StockInDao {
         return null;
     }
 
+    // 更新主表
+    public boolean update(StockInDTO dto) {
+
+        String sql = "UPDATE stock_in SET " +
+                "invoice_no = ?, supplier = ?, operator = ?, status = ? " +
+                "WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, dto.getInvoiceNo());
+            ps.setString(2, dto.getSupplier());
+            ps.setString(3, dto.getOperator());
+            ps.setInt(4, dto.getStatus());
+            ps.setInt(5, dto.getId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // 删除主表
+    public boolean delete(int id) {
+
+        String sql = "DELETE FROM stock_in WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // 获取所有记录的 ID 列表（倒序，最新的在前）
+    public List<Integer> findAllIds() {
+
+        List<Integer> ids = new ArrayList<>();
+
+        String sql = "SELECT id FROM stock_in ORDER BY id DESC";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                ids.add(rs.getInt("id"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ids;
+    }
+
 }
