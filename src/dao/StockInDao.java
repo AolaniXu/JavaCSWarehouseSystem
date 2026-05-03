@@ -93,4 +93,38 @@ public class StockInDao {
         return list;
     }
 
+    // 根据 ID 查询单条记录
+    public StockInView findById(int id) {
+
+        String sql = "SELECT id, warehouse_id, create_time, invoice_no, " +
+                "supplier, operator, status, biz_time " +
+                "FROM stock_in WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    StockInView v = new StockInView();
+                    v.setId(rs.getInt("id"));
+                    v.setWarehouseId(rs.getInt("warehouse_id"));
+                    v.setCreateTime(rs.getString("create_time"));
+                    v.setInvoiceNo(rs.getString("invoice_no"));
+                    v.setSupplier(rs.getString("supplier"));
+                    v.setOperator(rs.getString("operator"));
+                    v.setStatus(rs.getInt("status"));
+                    v.setBizTime(rs.getString("biz_time"));
+                    return v;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

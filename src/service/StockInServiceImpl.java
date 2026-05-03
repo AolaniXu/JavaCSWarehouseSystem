@@ -62,8 +62,9 @@ public class StockInServiceImpl implements StockInService {
 
     @Override
     public StockInDTO findById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        // TODO: 实现根据 ID 查询完整数据（包括明细）
+        // 目前返回 null，后续会完善
+        return null;
     }
 
     private StockInDao dao = new StockInDao();
@@ -74,3 +75,4 @@ public class StockInServiceImpl implements StockInService {
     }
 
 }
+

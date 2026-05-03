@@ -150,4 +150,17 @@ public class InStockPane extends BaseFormPane {
 
         return dto;
     }
+
+    // 加载数据到表单（从 DTO）
+    public void setData(StockInDTO dto) {
+        txtInvoice.setText(dto.getInvoiceNo() != null ? dto.getInvoiceNo() : "");
+        txtSupplier.setText(dto.getSupplier() != null ? dto.getSupplier() : "");
+        txtOperator.setText(dto.getOperator() != null ? dto.getOperator() : "");
+        // 日期转换（DTO.createTime 是 Date 类型）
+        if (dto.getCreateTime() != null) {
+            txtDate.setText(dto.getCreateTime().toString());
+        } else {
+            txtDate.setText("");
+        }
+    }
 }
