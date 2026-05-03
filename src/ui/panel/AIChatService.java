@@ -165,22 +165,20 @@ public class AIChatService {
     }
 
     private String extractContentFromJson(String json) {
-        // 解析 choices[0].message.content
-        int choicesStart = json.indexOf("\"choices\":[");
+        int choicesStart = json.indexOf("\"choices\"");
         if (choicesStart == -1) return "无法解析响应";
 
-        // 找到 message 内容
-        int contentStart = json.indexOf("\"content\":\"", choicesStart);
-        if (contentStart == -1) {
-            // 尝试另一种格式
-            contentStart = json.indexOf("\"content\":\"");
-        }
-        if (contentStart == -1) return "无法解析内容";
+        int contentKey = json.indexOf("\"content\"", choicesStart);
+        if (contentKey == -1) return "无法解析内容";
 
-        contentStart += 10; // "content":" 的长度
-        int contentEnd = contentStart;
+        int colon = json.indexOf(':', contentKey);
+        if (colon == -1) return "无法解析内容";
 
-        // 找到结束引号（处理转义）
+        int quoteStart = json.indexOf('"', colon);
+        if (quoteStart == -1) return "无法解析内容";
+        quoteStart++;
+
+        int contentEnd = quoteStart;
         while (contentEnd < json.length()) {
             char c = json.charAt(contentEnd);
             if (c == '"' && json.charAt(contentEnd - 1) != '\\') {
@@ -188,11 +186,19 @@ public class AIChatService {
             }
             contentEnd++;
         }
+        if (contentEnd >= json.length()) return "无法解析内容";
 
-        String content = json.substring(contentStart, contentEnd);
-        // 处理转义字符
-        content = content.replace("\\n", "\n").replace("\\\"", "\"").replace("\\\\", "\\");
-        return content;
+        String content = json.substring(quoteStart, contentEnd);
+        return unescapeJson(content);
+    }
+
+    private String unescapeJson(String value) {
+        return value
+                .replace("\\n", "\n")
+                .replace("\\r", "\r")
+                .replace("\\t", "\t")
+                .replace("\\\"", "\"")
+                .replace("\\\\", "\\");
     }
 
     private String escapeJson(String str) {
