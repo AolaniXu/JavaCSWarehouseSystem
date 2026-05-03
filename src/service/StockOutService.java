@@ -17,5 +17,9 @@ public interface StockOutService {
     List<StockOutView> getStockOutList();
 
     List<Integer> getAllIds();
+
+    // 审核出库单（审核后扣减库存）
+    void audit(int id);
+
 }
 

@@ -22,14 +22,13 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
     // 编辑状态
     private boolean isNewMode = true;
     private int currentRecordId = -1;
+    private int currentStatus = 0;  // 0=未审核, 1=已审核
 
     // 导航状态
     private List<Integer> recordIds;
     private int currentIndex = -1;
 
     public OutStockFrame() {
-
-        System.out.println("Initializing OutStockFrame...");
 
         setTitle("出库管理");
         setSize(900, 600);
@@ -58,15 +57,33 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
         setBottom(nav);
     }
 
-    // ===== 表格行选择回调 =====
+    // 表格行选择回调
     private void onRowSelected(StockOutDTO dto) {
         formPane.setData(dto);
         isNewMode = false;
         currentRecordId = dto.getId();
+        currentStatus = dto.getStatus();
         nav.updateEditState(false);
         refreshNavigationState();
+        updateButtonState();
     }
 
+    // 根据审核状态更新按钮
+    private void updateButtonState() {
+        if (currentStatus == 1) {
+            nav.saveButton.setEnabled(false);
+            nav.deleteButton.setEnabled(false);
+            nav.auditButton.setText("已审核");
+            nav.auditButton.setEnabled(false);
+        } else {
+            nav.saveButton.setEnabled(true);
+            nav.deleteButton.setEnabled(currentRecordId > 0);
+            nav.auditButton.setText("审核");
+            nav.auditButton.setEnabled(currentRecordId > 0);
+        }
+    }
+
+    // 刷新导航状态
     private void refreshNavigationState() {
         recordIds = service.getAllIds();
         currentIndex = recordIds.indexOf(currentRecordId);
@@ -74,17 +91,19 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
                 currentIndex > 0,
                 currentIndex < recordIds.size() - 1
         );
-        nav.deleteButton.setEnabled(currentRecordId > 0);
     }
 
+    // 加载记录
     private void loadRecord(int id) {
         StockOutDTO dto = service.findById(id);
         if (dto != null) {
             formPane.setData(dto);
             currentRecordId = id;
+            currentStatus = dto.getStatus();
             isNewMode = false;
             nav.updateEditState(false);
             refreshNavigationState();
+            updateButtonState();
         }
     }
 
@@ -95,13 +114,90 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
         formPane.reset();
         isNewMode = true;
         currentRecordId = -1;
+        currentStatus = 0;
         currentIndex = -1;
         nav.updateEditState(true);
         nav.updateNavigationState(false, false);
+        nav.saveButton.setEnabled(true);
         nav.deleteButton.setEnabled(false);
+        nav.auditButton.setText("审核");
+        nav.auditButton.setEnabled(false);
         tablePane.refresh();
     }
 
+    @Override
+    public void onSave() {
+        if (currentStatus == 1) {
+            JOptionPane.showMessageDialog(this, "已审核的单据不能修改");
+            return;
+        }
+        if (isNewMode) {
+            insertData();
+        } else {
+            updateData();
+        }
+    }
+
+    @Override
+    public void onDelete() {
+        if (currentStatus == 1) {
+            JOptionPane.showMessageDialog(this, "已审核的单据不能删除");
+            return;
+        }
+        if (currentRecordId <= 0) {
+            JOptionPane.showMessageDialog(this, "请先选择要删除的记录");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "确定要删除这条记录吗？",
+                "确认删除",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                service.delete(currentRecordId);
+                JOptionPane.showMessageDialog(this, "删除成功");
+                onNew();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "删除失败：" + ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onAudit() {
+        if (currentRecordId <= 0) {
+            JOptionPane.showMessageDialog(this, "请先选择要审核的单据");
+            return;
+        }
+        if (currentStatus == 1) {
+            JOptionPane.showMessageDialog(this, "该单据已经审核过了");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "审核通过后，库存将自动扣减。确定要审核吗？",
+                "确认审核",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                service.audit(currentRecordId);
+                JOptionPane.showMessageDialog(this, "审核成功，库存已扣减");
+
+                loadRecord(currentRecordId);
+                tablePane.refresh();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "审核失败：" + ex.getMessage());
+            }
+        }
+    }
+
+    // 导航方法
     @Override
     public void onFirst() {
         if (recordIds == null || recordIds.isEmpty()) return;
@@ -126,78 +222,27 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
         loadRecord(recordIds.get(recordIds.size() - 1));
     }
 
-    @Override
-    public void onSave() {
-        if (isNewMode) {
-            insertData();
-        } else {
-            updateData();
-        }
-    }
-
-    @Override
-    public void onDelete() {
-        if (currentRecordId <= 0) {
-            JOptionPane.showMessageDialog(this, "请先选择要删除的记录");
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "确定要删除这条记录吗？",
-                "确认删除",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                service.delete(currentRecordId);
-                JOptionPane.showMessageDialog(this, "删除成功");
-
-                formPane.reset();
-                isNewMode = true;
-                currentRecordId = -1;
-                currentIndex = -1;
-                nav.updateEditState(true);
-                nav.updateNavigationState(false, false);
-                nav.deleteButton.setEnabled(false);
-
-                refreshNavigationState();
-                tablePane.refresh();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "删除失败：" + ex.getMessage());
-            }
-        }
-    }
-
-    @Override
-    public void onAudit() {
-        JOptionPane.showMessageDialog(this, "审核功能暂未实现");
-    }
-
-    // ===== 插入数据 =====
+    // 插入数据
     private void insertData() {
-
         try {
             StockOutDTO dto = formPane.getData();
-
             if (dto == null) {
                 JOptionPane.showMessageDialog(this, "数据获取失败");
                 return;
             }
-
             if (dto.getDetails() == null || dto.getDetails().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "请至少填写一条出库明细");
                 return;
             }
 
             service.create(dto);
+            JOptionPane.showMessageDialog(this, "提交成功（未审核）");
 
-            JOptionPane.showMessageDialog(this, "提交成功");
-
+            currentRecordId = dto.getId() != null ? dto.getId() : -1;
             isNewMode = false;
             nav.updateEditState(false);
             refreshNavigationState();
+            updateButtonState();
             tablePane.refresh();
 
         } catch (NumberFormatException ex) {
@@ -208,9 +253,8 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
         }
     }
 
-    // ===== 更新数据 =====
+    // 更新数据
     private void updateData() {
-
         if (currentRecordId <= 0) {
             JOptionPane.showMessageDialog(this, "请先选择要更新的记录");
             return;
@@ -218,12 +262,10 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
 
         try {
             StockOutDTO dto = formPane.getData();
-
             if (dto == null) {
                 JOptionPane.showMessageDialog(this, "数据获取失败");
                 return;
             }
-
             if (dto.getDetails() == null || dto.getDetails().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "请至少填写一条出库明细");
                 return;
@@ -233,7 +275,6 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
             dto.setStatus(0);
 
             service.update(dto);
-
             JOptionPane.showMessageDialog(this, "更新成功");
             tablePane.refresh();
 

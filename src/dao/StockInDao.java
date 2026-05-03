@@ -192,4 +192,23 @@ public class StockInDao {
         return ids;
     }
 
+    // 更新状态
+    public boolean updateStatus(int id, int status) {
+
+        String sql = "UPDATE stock_in SET status = ? WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, status);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

@@ -9,12 +9,14 @@ import model.StockOutView;
 import dao.ProductDao;
 import dao.StockOutDao;
 import dao.StockOutDetailDao;
+import dao.InventoryDao;
 
 public class StockOutServiceImpl implements StockOutService {
 
     private StockOutDao stockOutDao = new StockOutDao();
     private StockOutDetailDao detailDao = new StockOutDetailDao();
     private ProductDao productDao = new ProductDao();
+    private InventoryDao inventoryDao = new InventoryDao();
 
     @Override
     public void create(StockOutDTO dto) {
@@ -104,4 +106,26 @@ public class StockOutServiceImpl implements StockOutService {
     public List<Integer> getAllIds() {
         return stockOutDao.findAllIds();
     }
+
+    @Override
+    public void audit(int id) {
+        // 1. 获取出库单明细
+        StockOutDTO dto = findById(id);
+        if (dto == null) {
+            throw new RuntimeException("出库单不存在");
+        }
+
+        // 2. 扣减库存
+        for (StockOutDetailDTO detail : dto.getDetails()) {
+            // 如果没有 productId，通过 code 查找
+            if (detail.getProductId() == null) {
+                detail.setProductId(productDao.findIdByCode(detail.getProductCode()));
+            }
+            inventoryDao.decrease(detail.getProductId(), detail.getQuantity());
+        }
+
+        // 3. 更新状态为已审核
+        stockOutDao.updateStatus(id, 1);
+    }
+
 }

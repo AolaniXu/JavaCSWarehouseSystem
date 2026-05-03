@@ -19,4 +19,7 @@ public interface StockInService {
     // 获取所有记录的 ID 列表（用于导航）
     List<Integer> getAllIds();
 
+    // 审核入库单（审核后更新库存）
+    void audit(int id);
+
 }
