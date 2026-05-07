@@ -1,4 +1,4 @@
-package ui.panel;
+package service;
 
 import java.io.*;
 import java.net.HttpURLConnection;

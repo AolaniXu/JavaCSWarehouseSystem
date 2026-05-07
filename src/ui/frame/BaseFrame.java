@@ -2,11 +2,6 @@ package ui.frame;
 
 import java.awt.BorderLayout;
 import javax.swing.*;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
-
-import ui.MainFrame;
-
 import java.awt.Component;
 
 public abstract class BaseFrame extends JInternalFrame {
@@ -52,23 +47,21 @@ public abstract class BaseFrame extends JInternalFrame {
     protected void setRight(Component comp) {
 
         if (comp == null)
-            return; // 【改动2：防止NPE】
-
-        rightPanel.removeAll(); // 【改动3：关键，先清空】
+            return; 
+        rightPanel.removeAll(); 
         rightPanel.add(comp, BorderLayout.CENTER);
 
-        rightPanel.revalidate(); // 【改动4：刷新UI】
+        rightPanel.revalidate(); 
         rightPanel.repaint();
     }
 
     protected void setBottom(Component comp) {
-        bottomPanel.removeAll(); // 【改动5：统一风格】
+        bottomPanel.removeAll(); 
         bottomPanel.add(comp);
         bottomPanel.revalidate();
         bottomPanel.repaint();
     }
 
-    // 【改动6：提供外部调用入口（菜单用）】
     public void showRight(Component comp) {
         setRight(comp);
     }

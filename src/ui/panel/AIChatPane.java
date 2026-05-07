@@ -1,6 +1,9 @@
 package ui.panel;
 
 import javax.swing.*;
+
+import service.AIChatService;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

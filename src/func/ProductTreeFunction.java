@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 import ui.MainFrame;
 import ui.frame.BaseFrame;
-import ui.panel.ProductTreePanel;
+import ui.panel.ProductTreePane;
 
 public class ProductTreeFunction extends AbstractButtonFunction {
 
@@ -16,7 +16,7 @@ public class ProductTreeFunction extends AbstractButtonFunction {
 
         System.out.println("Executing ProductTreeFunction...");
 
-        JPanel panel = new ProductTreePanel();
+        JPanel panel = new ProductTreePane();
 
         // 直接使用 MainFrame 的静态实例
         MainFrame mainFrame = MainFrame.instance;

@@ -22,7 +22,7 @@ public class DBUtil {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    // 关闭资源（非常重要）
+    // 关闭资源
     public static void close(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (rs != null) rs.close();

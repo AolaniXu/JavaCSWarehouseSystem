@@ -1,20 +1,17 @@
 package ui.panel;
 
-
-
 import model.ProductNode;
 import service.ProductService;
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.List;
 
-public class ProductTreePanel extends JPanel {
+public class ProductTreePane extends JPanel {
 
     private JTree tree;
 
-    public ProductTreePanel() {
+    public ProductTreePane() {
         System.out.println("Initializing ProductTreePanel...");
         setLayout(new BorderLayout());
         initTree();

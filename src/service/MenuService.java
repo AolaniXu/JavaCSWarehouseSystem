@@ -1,12 +1,8 @@
 package service;
 
 import javax.swing.*;
-
-import java.awt.Window;
-import java.awt.KeyboardFocusManager;
 import java.util.*;
 import model.MenuItem;
-import ui.MainFrame;
 import func.AbstractButtonFunction;
 
 public class MenuService {
@@ -109,7 +105,5 @@ public class MenuService {
             e.printStackTrace();
         }
     }
-
-
 
 }

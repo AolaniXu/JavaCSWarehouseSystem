@@ -2,8 +2,6 @@ package ui.panel;
 
 import javax.swing.JPanel;
 
-import javax.swing.*;
-import java.awt.*;
 
 public abstract class BaseFormPane<T> extends JPanel {
 
