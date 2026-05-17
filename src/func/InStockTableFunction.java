@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import ui.MainFrame;
 import ui.frame.BaseFrame;
+import ui.frame.InStockFrame;
 import ui.panel.StockInTablePane;
 
 public class InStockTableFunction extends AbstractButtonFunction {
@@ -26,6 +27,12 @@ public class InStockTableFunction extends AbstractButtonFunction {
             if (frames.length > 0) {
                 System.out.println("Found " + frames.length + " internal frames, showing stock in table...");
                 for (JInternalFrame frame : frames) {
+                    if (frame instanceof InStockFrame) {
+                        ((InStockFrame) frame).bindTablePane((StockInTablePane) panel);
+                        ((BaseFrame) frame).showRight(panel);
+                        System.out.println("Stock in table shown and listener bound!");
+                        return;
+                    }
                     if (frame instanceof BaseFrame) {
                         ((BaseFrame) frame).showRight(panel);
                         System.out.println("Stock in table shown!");

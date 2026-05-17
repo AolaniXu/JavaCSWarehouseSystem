@@ -1,6 +1,8 @@
 package ui.panel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -12,6 +14,12 @@ public class ProductTablePane extends JPanel {
     private JTable table;
     private DefaultTableModel model;
     private ProductDao dao = new ProductDao();
+
+    public interface OnProductSelectedListener {
+        void onProductSelected(Product product);
+    }
+
+    private OnProductSelectedListener selectedListener;
 
     public ProductTablePane() {
         setLayout(new BorderLayout());
@@ -30,6 +38,25 @@ public class ProductTablePane extends JPanel {
             }
         };
         table = new JTable(model);
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && selectedListener != null) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow >= 0) {
+                        Product product = new Product();
+                        product.setId((int) model.getValueAt(selectedRow, 0));
+                        product.setCode((String) model.getValueAt(selectedRow, 1));
+                        product.setName((String) model.getValueAt(selectedRow, 2));
+                        product.setSpec((String) model.getValueAt(selectedRow, 3));
+                        product.setType((String) model.getValueAt(selectedRow, 4));
+                        product.setUnit((String) model.getValueAt(selectedRow, 5));
+                        selectedListener.onProductSelected(product);
+                    }
+                }
+            }
+        });
 
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
@@ -54,5 +81,9 @@ public class ProductTablePane extends JPanel {
 
     public void refresh() {
         loadData();
+    }
+
+    public void setOnProductSelectedListener(OnProductSelectedListener listener) {
+        this.selectedListener = listener;
     }
 }

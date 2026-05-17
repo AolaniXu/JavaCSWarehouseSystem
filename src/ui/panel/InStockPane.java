@@ -1,5 +1,6 @@
 package ui.panel;
 
+import model.Product;
 import model.StockInDTO;
 import model.StockInDetailDTO;
 import javax.swing.*;
@@ -120,6 +121,17 @@ public class InStockPane extends BaseFormPane {
         txtAmount.setText("");
         txtSupplier.setText("");
         txtOperator.setText("");
+    }
+
+    public void setProduct(Product product) {
+        if (product == null) {
+            return;
+        }
+        txtCode.setText(product.getCode() != null ? product.getCode() : "");
+        txtName.setText(product.getName() != null ? product.getName() : "");
+        txtSpec.setText(product.getSpec() != null ? product.getSpec() : "");
+        txtType.setText(product.getType() != null ? product.getType() : "");
+        txtUnit.setText(product.getUnit() != null ? product.getUnit() : "");
     }
 
     @Override

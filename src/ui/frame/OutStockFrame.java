@@ -6,6 +6,8 @@ import java.util.List;
 
 import ui.panel.OutStockPane;
 import ui.panel.OutStockTablePane;
+import ui.panel.ProductTablePane;
+import ui.panel.ProductTreePane;
 import ui.componet.DataNavigator;
 import model.StockOutDTO;
 import model.StockOutDetailDTO;
@@ -105,6 +107,19 @@ public class OutStockFrame extends BaseFrame implements DataNavigator.Listener {
             refreshNavigationState();
             updateButtonState();
         }
+    }
+
+    // 绑定外部创建的表格面板监听器
+    public void bindTablePane(OutStockTablePane pane) {
+        pane.setOnRowSelectedListener(this::onRowSelected);
+    }
+
+    public void bindProductTablePane(ProductTablePane pane) {
+        pane.setOnProductSelectedListener(formPane::setProduct);
+    }
+
+    public void bindProductTreePane(ProductTreePane pane) {
+        pane.setOnProductSelectedListener(formPane::setProduct);
     }
 
     // ===== DataNavigator.Listener 实现 =====

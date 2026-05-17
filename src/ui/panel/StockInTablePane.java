@@ -98,6 +98,7 @@ public class StockInTablePane extends JPanel {
     // 刷新表格数据
     public void refresh() {
         loadData();
+        table.clearSelection();
     }
 
     // 设置行选择监听器

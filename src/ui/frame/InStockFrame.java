@@ -5,6 +5,8 @@ import java.awt.*;
 import java.util.List;
 
 import ui.panel.InStockPane;
+import ui.panel.ProductTablePane;
+import ui.panel.ProductTreePane;
 import ui.panel.StockInTablePane;
 import ui.componet.DataNavigator;
 import model.StockInDTO;
@@ -107,6 +109,19 @@ public class InStockFrame extends BaseFrame implements DataNavigator.Listener {
             refreshNavigationState();
             updateButtonState();
         }
+    }
+
+    // 绑定外部创建的表格面板监听器
+    public void bindTablePane(StockInTablePane pane) {
+        pane.setOnRowSelectedListener(this::onRowSelected);
+    }
+
+    public void bindProductTablePane(ProductTablePane pane) {
+        pane.setOnProductSelectedListener(formPane::setProduct);
+    }
+
+    public void bindProductTreePane(ProductTreePane pane) {
+        pane.setOnProductSelectedListener(formPane::setProduct);
     }
 
     // ===== DataNavigator.Listener 实现 =====

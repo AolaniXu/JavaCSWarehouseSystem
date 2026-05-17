@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 import ui.MainFrame;
 import ui.frame.BaseFrame;
+import ui.frame.InStockFrame;
+import ui.frame.OutStockFrame;
 import ui.panel.ProductTreePane;
 
 public class ProductTreeFunction extends AbstractButtonFunction {
@@ -32,6 +34,18 @@ public class ProductTreeFunction extends AbstractButtonFunction {
                 // 找到第一个 BaseFrame（入库Frame）
                 System.out.println("Found " + frames.length + " internal frames, trying to show product tree panel...");
                 for (JInternalFrame frame : frames) {
+                    if (frame instanceof InStockFrame) {
+                        ((InStockFrame) frame).bindProductTreePane((ProductTreePane) panel);
+                        ((BaseFrame) frame).showRight(panel);
+                        System.out.println("Product tree panel shown and listener bound to InStockFrame!");
+                        return;
+                    }
+                    if (frame instanceof OutStockFrame) {
+                        ((OutStockFrame) frame).bindProductTreePane((ProductTreePane) panel);
+                        ((BaseFrame) frame).showRight(panel);
+                        System.out.println("Product tree panel shown and listener bound to OutStockFrame!");
+                        return;
+                    }
                     if (frame instanceof BaseFrame) {
                         ((BaseFrame) frame).showRight(panel);
                         System.out.println("Product tree panel shown!");

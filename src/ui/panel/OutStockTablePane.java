@@ -93,6 +93,7 @@ public class OutStockTablePane extends JPanel {
 
     public void refresh() {
         loadData();
+        table.clearSelection();
     }
 
     public void setOnRowSelectedListener(OnRowSelectedListener listener) {
