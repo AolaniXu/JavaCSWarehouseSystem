@@ -1,8 +1,10 @@
 package ui.panel;
 
+import dao.WarehouseDao;
 import model.Product;
 import model.StockOutDTO;
 import model.StockOutDetailDTO;
+import model.Warehouse;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class OutStockPane extends BaseFormPane {
     private JTextField txtAmount;
 
     private JPanel formPanel;
+    private WarehouseDao warehouseDao = new WarehouseDao();
+    private Integer selectedWarehouseId;
 
     public OutStockPane() {
         super();
@@ -120,6 +124,17 @@ public class OutStockPane extends BaseFormPane {
         txtAmount.setText("");
         txtCustomer.setText("");
         txtOperator.setText("");
+        selectedWarehouseId = null;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        if (warehouse == null) {
+            selectedWarehouseId = null;
+            txtWarehouse.setText("");
+            return;
+        }
+        selectedWarehouseId = warehouse.getId();
+        txtWarehouse.setText(warehouse.getName() != null ? warehouse.getName() : "");
     }
 
     public void setProduct(Product product) {
@@ -139,6 +154,7 @@ public class OutStockPane extends BaseFormPane {
         StockOutDTO dto = new StockOutDTO();
 
         // 主表
+        dto.setWarehouseId(selectedWarehouseId);
         dto.setInvoiceNo(txtInvoice.getText());
         dto.setCustomer(txtCustomer.getText());
         dto.setOperator(txtOperator.getText());
@@ -160,6 +176,13 @@ public class OutStockPane extends BaseFormPane {
     // 加载数据到表单
     public void setData(StockOutDTO dto) {
         // 主表
+        selectedWarehouseId = dto.getWarehouseId();
+        if (selectedWarehouseId != null) {
+            Warehouse warehouse = warehouseDao.findById(selectedWarehouseId);
+            txtWarehouse.setText(warehouse != null ? warehouse.getName() : "");
+        } else {
+            txtWarehouse.setText("");
+        }
         txtInvoice.setText(dto.getInvoiceNo() != null ? dto.getInvoiceNo() : "");
         txtCustomer.setText(dto.getCustomer() != null ? dto.getCustomer() : "");
         txtOperator.setText(dto.getOperator() != null ? dto.getOperator() : "");

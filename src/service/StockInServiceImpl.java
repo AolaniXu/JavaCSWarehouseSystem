@@ -22,7 +22,9 @@ public class StockInServiceImpl implements StockInService {
     public void create(StockInDTO dto) {
 
         // 1. 基本处理
-        dto.setWarehouseId(1);
+        if (dto.getWarehouseId() == null) {
+            dto.setWarehouseId(1);
+        }
         dto.setStatus(0);
         dto.setCreateTime(new Date());
 

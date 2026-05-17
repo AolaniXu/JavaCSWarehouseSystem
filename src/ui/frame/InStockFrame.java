@@ -8,6 +8,7 @@ import ui.panel.InStockPane;
 import ui.panel.ProductTablePane;
 import ui.panel.ProductTreePane;
 import ui.panel.StockInTablePane;
+import ui.panel.WarehouseTablePane;
 import ui.componet.DataNavigator;
 import model.StockInDTO;
 import model.StockInDetailDTO;
@@ -122,6 +123,10 @@ public class InStockFrame extends BaseFrame implements DataNavigator.Listener {
 
     public void bindProductTreePane(ProductTreePane pane) {
         pane.setOnProductSelectedListener(formPane::setProduct);
+    }
+
+    public void bindWarehouseTablePane(WarehouseTablePane pane) {
+        pane.setOnWarehouseSelectedListener(formPane::setWarehouse);
     }
 
     // ===== DataNavigator.Listener 实现 =====
