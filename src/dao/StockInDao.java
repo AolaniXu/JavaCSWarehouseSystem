@@ -13,8 +13,8 @@ public class StockInDao {
     public int insert(StockInDTO dto) {
 
         String sql = "INSERT INTO stock_in " +
-                "(warehouse_id, create_time, invoice_no, supplier, operator, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "(warehouse_id, create_time, invoice_no, supplier, operator, status, biz_time) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -36,6 +36,7 @@ public class StockInDao {
             ps.setString(4, dto.getSupplier());
             ps.setString(5, dto.getOperator());
             ps.setInt(6, dto.getStatus());
+            setNullableTimestamp(ps, 7, dto.getBizTime());
 
             int rows = ps.executeUpdate();
 
@@ -131,7 +132,7 @@ public class StockInDao {
     public boolean update(StockInDTO dto) {
 
         String sql = "UPDATE stock_in SET " +
-                "invoice_no = ?, supplier = ?, operator = ?, status = ? " +
+                "invoice_no = ?, supplier = ?, operator = ?, status = ?, biz_time = ? " +
                 "WHERE id = ?";
 
         try (Connection conn = DBUtil.getConnection();
@@ -141,7 +142,8 @@ public class StockInDao {
             ps.setString(2, dto.getSupplier());
             ps.setString(3, dto.getOperator());
             ps.setInt(4, dto.getStatus());
-            ps.setInt(5, dto.getId());
+            setNullableTimestamp(ps, 5, dto.getBizTime());
+            ps.setInt(6, dto.getId());
 
             return ps.executeUpdate() > 0;
 
@@ -209,6 +211,14 @@ public class StockInDao {
         }
 
         return false;
+    }
+
+    private void setNullableTimestamp(PreparedStatement ps, int index, Date value) throws SQLException {
+        if (value == null) {
+            ps.setNull(index, Types.TIMESTAMP);
+        } else {
+            ps.setTimestamp(index, new Timestamp(value.getTime()));
+        }
     }
 
 }

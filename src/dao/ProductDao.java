@@ -12,7 +12,7 @@ public class ProductDao {
 
         List<Product> list = new ArrayList<>();
 
-        String sql = "SELECT id, code, name, spec, type, unit FROM product ORDER BY id";
+        String sql = "SELECT id, code, name, spec, unit FROM product ORDER BY id";
 
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);
@@ -24,7 +24,6 @@ public class ProductDao {
                 p.setCode(rs.getString("code"));
                 p.setName(rs.getString("name"));
                 p.setSpec(rs.getString("spec"));
-                p.setType(rs.getString("type"));
                 p.setUnit(rs.getString("unit"));
                 list.add(p);
             }
@@ -38,7 +37,7 @@ public class ProductDao {
 
     public Product findById(int id) {
 
-        String sql = "SELECT id, code, name, spec, type, unit FROM product WHERE id = ?";
+        String sql = "SELECT id, code, name, spec, unit FROM product WHERE id = ?";
 
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -52,7 +51,6 @@ public class ProductDao {
                     p.setCode(rs.getString("code"));
                     p.setName(rs.getString("name"));
                     p.setSpec(rs.getString("spec"));
-                    p.setType(rs.getString("type"));
                     p.setUnit(rs.getString("unit"));
                     return p;
                 }

@@ -5,6 +5,7 @@ import model.StockOutView;
 import util.DBUtil;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class StockOutDao {
@@ -13,11 +14,15 @@ public class StockOutDao {
     public int insert(StockOutDTO dto) {
 
         String sql = "INSERT INTO stock_out " +
-                "(warehouse_id, create_time, invoice_no, customer, operator, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "(warehouse_id, create_time, invoice_no, customer, operator, status, biz_time) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            if (dto.getCreateTime() == null) {
+                dto.setCreateTime(new Date());
+            }
 
             ps.setInt(1, dto.getWarehouseId());
             ps.setTimestamp(2, new Timestamp(dto.getCreateTime().getTime()));
@@ -25,6 +30,7 @@ public class StockOutDao {
             ps.setString(4, dto.getCustomer());
             ps.setString(5, dto.getOperator());
             ps.setInt(6, dto.getStatus());
+            setNullableTimestamp(ps, 7, dto.getBizTime());
 
             int rows = ps.executeUpdate();
 
@@ -116,7 +122,7 @@ public class StockOutDao {
     public boolean update(StockOutDTO dto) {
 
         String sql = "UPDATE stock_out SET " +
-                "invoice_no = ?, customer = ?, operator = ?, status = ? " +
+                "invoice_no = ?, customer = ?, operator = ?, status = ?, biz_time = ? " +
                 "WHERE id = ?";
 
         try (Connection conn = DBUtil.getConnection();
@@ -126,7 +132,8 @@ public class StockOutDao {
             ps.setString(2, dto.getCustomer());
             ps.setString(3, dto.getOperator());
             ps.setInt(4, dto.getStatus());
-            ps.setInt(5, dto.getId());
+            setNullableTimestamp(ps, 5, dto.getBizTime());
+            ps.setInt(6, dto.getId());
 
             return ps.executeUpdate() > 0;
 
@@ -194,5 +201,13 @@ public class StockOutDao {
         }
 
         return false;
+    }
+
+    private void setNullableTimestamp(PreparedStatement ps, int index, Date value) throws SQLException {
+        if (value == null) {
+            ps.setNull(index, Types.TIMESTAMP);
+        } else {
+            ps.setTimestamp(index, new Timestamp(value.getTime()));
+        }
     }
 }

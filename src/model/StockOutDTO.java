@@ -11,6 +11,7 @@ public class StockOutDTO {
     private String customer;      // 客户（出库对应供应商）
     private String operator;
     private Date createTime;
+    private Date bizTime;
     private Integer status;
 
     private List<StockOutDetailDTO> details;
@@ -61,6 +62,14 @@ public class StockOutDTO {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getBizTime() {
+        return bizTime;
+    }
+
+    public void setBizTime(Date bizTime) {
+        this.bizTime = bizTime;
     }
 
     public Integer getStatus() {

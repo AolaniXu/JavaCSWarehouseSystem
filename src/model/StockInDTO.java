@@ -11,6 +11,7 @@ public class StockInDTO {
     private String supplier;
     private String operator;
     private Date createTime;
+    private Date bizTime;
     private Integer status;          
 
     private List<StockInDetailDTO> details;
@@ -62,6 +63,14 @@ public class StockInDTO {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getBizTime() {
+        return bizTime;
+    }
+
+    public void setBizTime(Date bizTime) {
+        this.bizTime = bizTime;
     }
 
     public Integer getStatus() {

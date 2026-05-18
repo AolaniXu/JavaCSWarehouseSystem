@@ -6,7 +6,6 @@ public class Product {
     private String code;
     private String name;
     private String spec;
-    private String type;
     private String unit;
 
     public int getId() {
@@ -39,14 +38,6 @@ public class Product {
 
     public void setSpec(String spec) {
         this.spec = spec;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getUnit() {

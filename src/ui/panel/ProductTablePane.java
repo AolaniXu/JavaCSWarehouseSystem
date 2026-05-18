@@ -29,7 +29,7 @@ public class ProductTablePane extends JPanel {
 
     private void initTable() {
 
-        String[] cols = {"ID", "编号", "名称", "规格", "类型", "单位"};
+        String[] cols = {"ID", "编号", "名称", "规格", "单位"};
 
         model = new DefaultTableModel(cols, 0) {
             @Override
@@ -50,8 +50,7 @@ public class ProductTablePane extends JPanel {
                         product.setCode((String) model.getValueAt(selectedRow, 1));
                         product.setName((String) model.getValueAt(selectedRow, 2));
                         product.setSpec((String) model.getValueAt(selectedRow, 3));
-                        product.setType((String) model.getValueAt(selectedRow, 4));
-                        product.setUnit((String) model.getValueAt(selectedRow, 5));
+                        product.setUnit((String) model.getValueAt(selectedRow, 4));
                         selectedListener.onProductSelected(product);
                     }
                 }
@@ -73,7 +72,6 @@ public class ProductTablePane extends JPanel {
                     p.getCode(),
                     p.getName(),
                     p.getSpec(),
-                    p.getType(),
                     p.getUnit()
             });
         }

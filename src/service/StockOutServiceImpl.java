@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -92,6 +93,8 @@ public class StockOutServiceImpl implements StockOutService {
         dto.setCustomer(view.getCustomer());
         dto.setOperator(view.getOperator());
         dto.setStatus(view.getStatus());
+        dto.setCreateTime(parseTimestamp(view.getCreateTime()));
+        dto.setBizTime(parseTimestamp(view.getBizTime()));
 
         // 3. 查询明细列表
         dto.setDetails(detailDao.findByStockOutId(id));
@@ -128,6 +131,13 @@ public class StockOutServiceImpl implements StockOutService {
 
         // 3. 更新状态为已审核
         stockOutDao.updateStatus(id, 1);
+    }
+
+    private Date parseTimestamp(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        return Timestamp.valueOf(value);
     }
 
 }

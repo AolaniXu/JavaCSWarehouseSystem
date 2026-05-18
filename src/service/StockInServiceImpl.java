@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -97,6 +98,8 @@ public class StockInServiceImpl implements StockInService {
         dto.setSupplier(view.getSupplier());
         dto.setOperator(view.getOperator());
         dto.setStatus(view.getStatus());
+        dto.setCreateTime(parseTimestamp(view.getCreateTime()));
+        dto.setBizTime(parseTimestamp(view.getBizTime()));
 
         // 3. 查询明细列表
         dto.setDetails(detailDao.findByStockInId(id));
@@ -141,6 +144,13 @@ public class StockInServiceImpl implements StockInService {
     public int getStatus(int id) {
         StockInDTO dto = findById(id);
         return dto != null ? dto.getStatus() : -1;
+    }
+
+    private Date parseTimestamp(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        return Timestamp.valueOf(value);
     }
 
 }
