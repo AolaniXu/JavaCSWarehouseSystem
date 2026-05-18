@@ -126,7 +126,9 @@ public class StockOutServiceImpl implements StockOutService {
             if (detail.getProductId() == null) {
                 detail.setProductId(productDao.findIdByCode(detail.getProductCode()));
             }
-            inventoryDao.decrease(detail.getProductId(), detail.getQuantity());
+            if (!inventoryDao.decrease(detail.getProductId(), dto.getWarehouseId(), detail.getQuantity())) {
+                throw new RuntimeException("库存不足，出库单不能审核");
+            }
         }
 
         // 3. 更新状态为已审核

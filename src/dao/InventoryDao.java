@@ -9,15 +9,16 @@ import java.util.List;
 public class InventoryDao {
 
     // 增加库存（不存在则插入，初始为0再累加）
-    public void increase(int productId, int quantity) {
+    public void increase(int productId, int warehouseId, int quantity) {
         String sql = "INSERT INTO inventory (product_id, warehouse_id, quantity) " +
-                "VALUES (?, 1, ?) " +
+                "VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE quantity = quantity + ?";
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
-            ps.setInt(2, quantity);
+            ps.setInt(2, warehouseId);
             ps.setInt(3, quantity);
+            ps.setInt(4, quantity);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -25,18 +26,19 @@ public class InventoryDao {
     }
 
     // 减少库存（先检查是否足够）
-    public boolean decrease(int productId, int quantity) {
-        int current = getQuantity(productId);
+    public boolean decrease(int productId, int warehouseId, int quantity) {
+        int current = getQuantity(productId, warehouseId);
         if (current < quantity) {
             return false;
         }
 
         String sql = "UPDATE inventory SET quantity = quantity - ? " +
-                "WHERE product_id = ? AND warehouse_id = 1";
+                "WHERE product_id = ? AND warehouse_id = ?";
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, quantity);
             ps.setInt(2, productId);
+            ps.setInt(3, warehouseId);
             ps.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -46,12 +48,13 @@ public class InventoryDao {
     }
 
     // 查询库存
-    public int getQuantity(int productId) {
+    public int getQuantity(int productId, int warehouseId) {
         String sql = "SELECT quantity FROM inventory " +
-                "WHERE product_id = ? AND warehouse_id = 1";
+                "WHERE product_id = ? AND warehouse_id = ?";
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
+            ps.setInt(2, warehouseId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("quantity");

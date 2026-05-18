@@ -133,7 +133,7 @@ public class StockInServiceImpl implements StockInService {
             if (detail.getProductId() == null) {
                 detail.setProductId(productDao.findIdByCode(detail.getProductCode()));
             }
-            inventoryDao.increase(detail.getProductId(), detail.getQuantity());
+            inventoryDao.increase(detail.getProductId(), dto.getWarehouseId(), detail.getQuantity());
         }
 
         // 3. 更新状态为已审核
