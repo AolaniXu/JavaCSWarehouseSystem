@@ -6,6 +6,8 @@ import model.StockInDTO;
 import model.StockInDetailDTO;
 import model.Warehouse;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +22,7 @@ public class InStockPane extends BaseFormPane {
     private JTextField txtSupplier;
     private JTextField txtOperator;
 
-    // ===== 明细输入框 =====
+    // ===== 明细输入框（商品字段只读） =====
     private JTextField txtCode;
     private JTextField txtName;
     private JTextField txtSpec;
@@ -46,20 +48,48 @@ public class InStockPane extends BaseFormPane {
 
         // 主表字段
         txtWarehouse = new JTextField(15);
+        txtWarehouse.setEditable(false);  // 只读，通过选择器选择
         txtDate = new JTextField(15);
         txtInvoice = new JTextField(15);
         txtSupplier = new JTextField(15);
         txtOperator = new JTextField(15);
 
-        // 明细字段
+        // 明细字段（商品字段只读，通过选择器选择）
         txtCode = new JTextField(15);
+        txtCode.setEditable(false);
         txtName = new JTextField(15);
+        txtName.setEditable(false);
         txtSpec = new JTextField(15);
+        txtSpec.setEditable(false);
         txtType = new JTextField(15);
+        txtType.setEditable(false);
         txtUnit = new JTextField(15);
+        txtUnit.setEditable(false);
         txtQty = new JTextField(15);
         txtPrice = new JTextField(15);
         txtAmount = new JTextField(15);
+        txtAmount.setEditable(false);  // 金额自动计算，只读
+
+        // 数量和单价变化时自动计算金额
+        DocumentListener amountListener = new DocumentListener() {
+            private void calcAmount() {
+                try {
+                    int qty = Integer.parseInt(txtQty.getText());
+                    double price = Double.parseDouble(txtPrice.getText());
+                    txtAmount.setText(String.valueOf(qty * price));
+                } catch (NumberFormatException e) {
+                    txtAmount.setText("");
+                }
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) { calcAmount(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { calcAmount(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { calcAmount(); }
+        };
+        txtQty.getDocument().addDocumentListener(amountListener);
+        txtPrice.getDocument().addDocumentListener(amountListener);
     }
 
     @Override
