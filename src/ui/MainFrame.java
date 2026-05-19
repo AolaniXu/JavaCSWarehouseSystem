@@ -16,13 +16,13 @@ import ui.frame.InStockFrame;
 
 public class MainFrame extends JFrame {
 
-    // 静态引用，供 ProductTreeFunction 等使用
+    // 静态引用，供ProductTreeFunction等使用
     public static MainFrame instance;
 
     private JDesktopPane desktopPane;
 
     private void initUI() {
-        // Set up the main frame
+        // 基本设置
         setTitle("仓库管理系统");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -16,7 +16,7 @@ public class StockInDTO {
 
     private List<StockInDetailDTO> details;
 
-    // 省略 getter/setter
+
     public Integer getId() {
         return id;
     }

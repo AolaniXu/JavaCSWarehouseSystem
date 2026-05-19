@@ -27,7 +27,7 @@ public class StockInDao {
                 dto.setCreateTime(new Date());
             }
 
-            // ⭐关键：获取自增主键
+            // 获取自增主键
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, dto.getWarehouseId());
@@ -94,7 +94,7 @@ public class StockInDao {
         return list;
     }
 
-    // 根据 ID 查询单条记录
+    // 根据ID查询单条记录
     public StockInView findById(int id) {
 
         String sql = "SELECT id, warehouse_id, create_time, invoice_no, " +
@@ -172,7 +172,7 @@ public class StockInDao {
         return false;
     }
 
-    // 获取所有记录的 ID 列表（倒序，最新的在前）
+    // 获取所有记录的ID列表（倒序，最新的在前）
     public List<Integer> findAllIds() {
 
         List<Integer> ids = new ArrayList<>();

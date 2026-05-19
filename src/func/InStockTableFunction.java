@@ -15,7 +15,7 @@ public class InStockTableFunction extends AbstractButtonFunction {
     @Override
     public void executeFunction(JMenuItem src) {
 
-        System.out.println("Executing InStockTableFunction...");
+        System.out.println("执行入库表功能...");
 
         JPanel panel = new StockInTablePane();
 
@@ -25,17 +25,17 @@ public class InStockTableFunction extends AbstractButtonFunction {
 
             JInternalFrame[] frames = desktopPane.getAllFrames();
             if (frames.length > 0) {
-                System.out.println("Found " + frames.length + " internal frames, showing stock in table...");
+                System.out.println("找到了 " + frames.length + " 个内部框架，正在显示入库表...");
                 for (JInternalFrame frame : frames) {
                     if (frame instanceof InStockFrame) {
                         ((InStockFrame) frame).bindTablePane((StockInTablePane) panel);
                         ((BaseFrame) frame).showRight(panel);
-                        System.out.println("Stock in table shown and listener bound!");
+                        System.out.println("入库表展示并且绑定监听器");
                         return;
                     }
                     if (frame instanceof BaseFrame) {
                         ((BaseFrame) frame).showRight(panel);
-                        System.out.println("Stock in table shown!");
+                        System.out.println("入库表展示");
                         return;
                     }
                 }

@@ -11,7 +11,7 @@ public class StockInView {
     private int status;
     private String bizTime;
     
-    // getter / setter
+
     public int getId() {
         return id;
     }

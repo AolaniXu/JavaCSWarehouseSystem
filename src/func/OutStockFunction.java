@@ -12,14 +12,14 @@ public class OutStockFunction extends AbstractButtonFunction {
     @Override
     public void executeFunction(JMenuItem src) {
 
-        System.out.println("Executing OutStockFunction...");
+        System.out.println("执行出库功能...");
 
         // 先尝试找到已有的出库窗口
         MainFrame mainFrame = MainFrame.instance;
         if (mainFrame != null) {
             JDesktopPane desktopPane = mainFrame.getDesktopPane();
 
-            // 遍历已有的 InternalFrame
+            // 遍历已有的InternalFrame
             for (JInternalFrame frame : desktopPane.getAllFrames()) {
                 if (frame instanceof OutStockFrame) {
                     // 已存在，激活并返回
@@ -32,7 +32,7 @@ public class OutStockFunction extends AbstractButtonFunction {
                 }
             }
 
-            // 不存在则新建，并添加到 desktopPane
+            // 不存在则新建，并添加到desktopPane
             OutStockFrame newFrame = new OutStockFrame();
             desktopPane.add(newFrame);
             try {

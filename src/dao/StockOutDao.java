@@ -84,7 +84,7 @@ public class StockOutDao {
         return list;
     }
 
-    // 根据 ID 查询
+    // 根据ID查询
     public StockOutView findById(int id) {
 
         String sql = "SELECT id, warehouse_id, create_time, invoice_no, " +

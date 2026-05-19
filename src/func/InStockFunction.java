@@ -19,7 +19,7 @@ public class InStockFunction extends AbstractButtonFunction {
         if (mainFrame != null) {
             JDesktopPane desktopPane = mainFrame.getDesktopPane();
 
-            // 遍历已有的 InternalFrame
+            // 遍历已有的InternalFrame
             for (JInternalFrame frame : desktopPane.getAllFrames()) {
                 if (frame instanceof InStockFrame) {
                     // 已存在，激活并返回
@@ -32,7 +32,7 @@ public class InStockFunction extends AbstractButtonFunction {
                 }
             }
 
-            // 不存在则新建，并添加到 desktopPane
+            // 不存在则新建，并添加到desktopPane
             InStockFrame newFrame = new InStockFrame();
             desktopPane.add(newFrame);
             try {

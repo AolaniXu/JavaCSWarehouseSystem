@@ -38,7 +38,7 @@ public abstract class BaseFrame extends JInternalFrame {
     }
 
     protected void setLeft(Component comp) {
-        leftPanel.removeAll(); // 【改动1】
+        leftPanel.removeAll(); 
         leftPanel.add(comp, BorderLayout.CENTER);
         leftPanel.revalidate();
         leftPanel.repaint();

@@ -16,7 +16,7 @@ public class WarehouseTableFunction extends AbstractButtonFunction {
     @Override
     public void executeFunction(JMenuItem src) {
 
-        System.out.println("Executing WarehouseTableFunction...");
+        System.out.println("执行仓库表功能...");
 
         JPanel panel = new WarehouseTablePane();
 
@@ -26,23 +26,23 @@ public class WarehouseTableFunction extends AbstractButtonFunction {
 
             JInternalFrame[] frames = desktopPane.getAllFrames();
             if (frames.length > 0) {
-                System.out.println("Found " + frames.length + " internal frames, showing warehouse table...");
+                System.out.println("找到了 " + frames.length + " 个内部框架，正在显示仓库表...");
                 for (JInternalFrame frame : frames) {
                     if (frame instanceof InStockFrame) {
                         ((InStockFrame) frame).bindWarehouseTablePane((WarehouseTablePane) panel);
                         ((BaseFrame) frame).showRight(panel);
-                        System.out.println("Warehouse table shown and listener bound to InStockFrame!");
+                        System.out.println("展示仓库表并绑定监听器到InStockFrame！");
                         return;
                     }
                     if (frame instanceof OutStockFrame) {
                         ((OutStockFrame) frame).bindWarehouseTablePane((WarehouseTablePane) panel);
                         ((BaseFrame) frame).showRight(panel);
-                        System.out.println("Warehouse table shown and listener bound to OutStockFrame!");
+                        System.out.println("展示仓库表并绑定监听器到OutStockFrame！");
                         return;
                     }
                     if (frame instanceof BaseFrame) {
                         ((BaseFrame) frame).showRight(panel);
-                        System.out.println("Warehouse table shown!");
+                        System.out.println("展示仓库表！");
                         return;
                     }
                 }

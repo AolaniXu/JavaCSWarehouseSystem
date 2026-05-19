@@ -8,9 +8,9 @@ public class StockInDetailDTO {
     private String productCode; // 冗余字段，方便显示
     private int quantity;
     private double price;
-    private double amount; // 计算字段，quantity * price
+    private double amount; // 计算字段，quantity*price
 
-    // 省略 getter/setter
+
     public Integer getId() {
         return id;
     }

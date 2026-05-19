@@ -262,7 +262,6 @@ public class InStockFrame extends BaseFrame implements DataNavigator.Listener {
             JOptionPane.showMessageDialog(this, "提交成功（未审核）");
 
             // 保存成功后加载这条记录
-            // 注意：insert 后返回的 ID 没有保存，这里简单处理
             currentRecordId = dto.getId() != null ? dto.getId() : -1;
             isNewMode = false;
             nav.updateEditState(false);
